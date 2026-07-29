@@ -21,13 +21,13 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @Column(nullable = false, length = 128)
+    @Column(nullable = false, unique = true, length = 128)
     private String email;
 
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, unique = true, length = 30)
     private String nickname;
 
     @Column(name = "profile_image")
