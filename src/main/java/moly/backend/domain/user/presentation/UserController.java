@@ -3,6 +3,7 @@ package moly.backend.domain.user.presentation;
 import lombok.RequiredArgsConstructor;
 import moly.backend.domain.user.presentation.dto.request.UserLoginRequest;
 import moly.backend.domain.user.presentation.dto.request.UserSignupRequest;
+import moly.backend.domain.user.presentation.dto.response.AccessTokenResponse;
 import moly.backend.domain.user.service.UserLoginService;
 import moly.backend.domain.user.service.UserSignupService;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginRequest request) {
-        return userLoginService.login(request.nickname(), request.password());
+    public AccessTokenResponse login(@RequestBody UserLoginRequest request) {
+        String accessToken = userLoginService.login(
+                request.nickname(),
+                request.password()
+        );
+        return AccessTokenResponse.from(accessToken);
     }
 }
