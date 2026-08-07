@@ -1,5 +1,6 @@
 package moly.backend.domain.user.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import moly.backend.domain.user.presentation.dto.request.UserLoginRequest;
 import moly.backend.domain.user.presentation.dto.request.UserSignupRequest;
@@ -23,7 +24,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signup(@RequestBody UserSignupRequest request) {
+    public void signup(@Valid @RequestBody UserSignupRequest request) {
         userSignupService.signup(
                 request.email(),
                 request.password(),
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public AccessTokenResponse login(@RequestBody UserLoginRequest request) {
+    public AccessTokenResponse login(@Valid @RequestBody UserLoginRequest request) {
         String accessToken = userLoginService.login(
                 request.nickname(),
                 request.password()

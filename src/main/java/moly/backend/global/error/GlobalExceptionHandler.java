@@ -1,12 +1,16 @@
 package moly.backend.global.error;
 
 import lombok.extern.slf4j.Slf4j;
+import moly.backend.domain.user.presentation.dto.request.UserLoginRequest;
+import moly.backend.domain.user.presentation.dto.request.UserSignupRequest;
 import moly.backend.global.error.exception.CustomException;
 import moly.backend.global.error.exception.ErrorCode;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +36,53 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.status())
                 .body(ErrorResponse.from(errorCode));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequest(
+            MethodArgumentNotValidException exception
+    ) {
+        ErrorCode errorCode = resolveValidationErrorCode(exception);
+
+        return ResponseEntity
+                .status(errorCode.status())
+                .body(ErrorResponse.from(errorCode));
+    }
+
+    private ErrorCode resolveValidationErrorCode(MethodArgumentNotValidException exception) {
+        Class<?> requestType = exception.getParameter().getParameterType();
+
+        if (requestType == UserLoginRequest.class) {
+            return ErrorCode.INVALID_LOGIN_INPUT;
+        }
+
+        if (requestType == UserSignupRequest.class) {
+            boolean hasBlankField = exception.getBindingResult().getFieldErrors().stream()
+                    .map(FieldError::getCode)
+                    .anyMatch("NotBlank"::equals);
+
+            if (hasBlankField) {
+                return ErrorCode.INVALID_SIGNUP_INPUT;
+            }
+
+            FieldError fieldError = exception.getBindingResult().getFieldErrors().stream()
+                    .filter(error -> "Size".equals(error.getCode()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (fieldError != null) {
+                return switch (fieldError.getField()) {
+                    case "email" -> ErrorCode.EMAIL_TOO_LONG;
+                    case "password" -> ErrorCode.PASSWORD_TOO_LONG;
+                    case "nickname" -> ErrorCode.NICKNAME_TOO_LONG;
+                    default -> ErrorCode.INVALID_SIGNUP_INPUT;
+                };
+            }
+
+            return ErrorCode.INVALID_SIGNUP_INPUT;
+        }
+
+        return ErrorCode.INVALID_REQUEST_BODY;
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

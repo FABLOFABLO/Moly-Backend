@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import moly.backend.domain.user.domain.User;
 import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.InvalidCredentialsException;
-import moly.backend.domain.user.exception.InvalidLoginInputException;
 import moly.backend.global.security.jwt.JwtTokenProvider;
 import moly.backend.global.security.token.RedisTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,13 +21,6 @@ public class UserLoginService {
 
     @Transactional(readOnly = true)
     public String login(String nickname, String password) {
-        if (nickname == null
-                || nickname.isBlank()
-                || password == null
-                || password.isBlank()) {
-            throw new InvalidLoginInputException();
-        }
-
         User user = userRepository.findByNickname(nickname)
                 .orElseThrow(InvalidCredentialsException::new);
 
