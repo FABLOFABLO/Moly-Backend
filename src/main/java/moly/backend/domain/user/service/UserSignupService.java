@@ -5,6 +5,7 @@ import moly.backend.domain.user.domain.User;
 import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.EmailAlreadyExistsException;
 import moly.backend.domain.user.exception.NicknameAlreadyExistsException;
+import moly.backend.domain.user.presentation.dto.request.UserSignupRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +18,19 @@ public class UserSignupService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void signup(String email, String password, String nickname) {
-        if (userRepository.existsByEmail(email)) {
+    public void signup(UserSignupRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new EmailAlreadyExistsException();
         }
 
-        if (userRepository.existsByNickname(nickname)) {
+        if (userRepository.existsByNickname(request.nickname())) {
             throw new NicknameAlreadyExistsException();
         }
 
         User user = User.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .nickname(nickname)
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .nickname(request.nickname())
                 .build();
 
         userRepository.save(user);

@@ -25,19 +25,12 @@ public class UserController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@Valid @RequestBody UserSignupRequest request) {
-        userSignupService.signup(
-                request.email(),
-                request.password(),
-                request.nickname()
-        );
+        userSignupService.signup(request);
     }
 
     @PostMapping("/login")
     public AccessTokenResponse login(@Valid @RequestBody UserLoginRequest request) {
-        String accessToken = userLoginService.login(
-                request.nickname(),
-                request.password()
-        );
+        String accessToken = userLoginService.login(request);
         return AccessTokenResponse.from(accessToken);
     }
 }

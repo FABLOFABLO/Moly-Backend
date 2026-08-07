@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import moly.backend.domain.user.domain.User;
 import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.InvalidCredentialsException;
+import moly.backend.domain.user.presentation.dto.request.UserLoginRequest;
 import moly.backend.global.security.jwt.JwtTokenProvider;
 import moly.backend.global.security.token.RedisTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,11 +21,11 @@ public class UserLoginService {
     private final RedisTokenRepository redisTokenRepository;
 
     @Transactional(readOnly = true)
-    public String login(String nickname, String password) {
-        User user = userRepository.findByNickname(nickname)
+    public String login(UserLoginRequest request) {
+        User user = userRepository.findByNickname(request.nickname())
                 .orElseThrow(InvalidCredentialsException::new);
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
 
