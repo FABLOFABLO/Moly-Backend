@@ -34,6 +34,9 @@ public class User {
     @Column(name = "profile_image")
     private String profileImage;
 
+    @Column(name = "memo_count", nullable = false)
+    private Long memoCount = 0L;
+
     @Builder
     private User(String email, String password, String nickname, String profileImage) {
         this.email = email;

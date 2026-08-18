@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST, "요청 본문을 읽을 수 없습니다."),
+    INVALID_REQUEST_VALUE(HttpStatus.BAD_REQUEST, "요청 값이 올바르지 않습니다."),
     INVALID_SIGNUP_INPUT(HttpStatus.BAD_REQUEST, "email, password, nickname은 필수입니다."),
     INVALID_LOGIN_INPUT(HttpStatus.BAD_REQUEST, "닉네임 와 password는 필수입니다."),
     EMAIL_TOO_LONG(HttpStatus.BAD_REQUEST, "email은 128자 이하여야 합니다."),
@@ -19,6 +20,9 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않거나 만료된 토큰입니다."),
     AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 사용자입니다."),
+    MEMO_NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없는 메모입니다."),
 
     TOKEN_STORE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "토큰 저장소에 연결할 수 없습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.");
