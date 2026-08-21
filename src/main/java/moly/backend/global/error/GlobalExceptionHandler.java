@@ -13,6 +13,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -43,10 +45,14 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception
     ) {
         ErrorCode errorCode = resolveValidationErrorCode(exception);
+        FieldError fieldError = exception.getBindingResult().getFieldError();
+        String message = fieldError == null
+                ? errorCode.message()
+                : fieldError.getDefaultMessage();
 
         return ResponseEntity
                 .status(errorCode.status())
-                .body(ErrorResponse.from(errorCode));
+                .body(new ErrorResponse(errorCode.name(), message));
     }
 
     private ErrorCode resolveValidationErrorCode(MethodArgumentNotValidException exception) {
@@ -82,7 +88,32 @@ public class GlobalExceptionHandler {
             return ErrorCode.INVALID_SIGNUP_INPUT;
         }
 
-        return ErrorCode.INVALID_REQUEST_BODY;
+        return ErrorCode.INVALID_REQUEST_VALUE;
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> handleMethodValidation(
+            HandlerMethodValidationException exception
+    ) {
+        String message = exception.getAllErrors().stream()
+                .findFirst()
+                .map(error -> error.getDefaultMessage())
+                .orElse(ErrorCode.INVALID_REQUEST_VALUE.message());
+
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse(ErrorCode.INVALID_REQUEST_VALUE.name(), message));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
+            MethodArgumentTypeMismatchException exception
+    ) {
+        ErrorCode errorCode = ErrorCode.INVALID_REQUEST_VALUE;
+
+        return ResponseEntity
+                .status(errorCode.status())
+                .body(ErrorResponse.from(errorCode));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

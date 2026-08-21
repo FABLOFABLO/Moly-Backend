@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import moly.backend.global.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,6 +43,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/users/signup", "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/memos").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/memos", "/memos/{memo-id}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/memos/{memo-id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/memos/{memo-id}").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

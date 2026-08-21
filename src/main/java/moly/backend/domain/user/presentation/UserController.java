@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserSignupService userSignupService;
@@ -29,6 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public AccessTokenResponse login(@Valid @RequestBody UserLoginRequest request) {
         String accessToken = userLoginService.login(request);
         return AccessTokenResponse.from(accessToken);
