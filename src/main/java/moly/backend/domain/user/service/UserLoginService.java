@@ -20,7 +20,7 @@ public class UserLoginService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTokenRepository redisTokenRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public String login(UserLoginRequest request) {
         User user = userRepository.findByNickname(request.nickname())
                 .orElseThrow(InvalidCredentialsException::new);
@@ -30,9 +30,9 @@ public class UserLoginService {
         }
 
         String accessToken =
-                jwtTokenProvider.generateAccessToken(user.getNickname());
+                jwtTokenProvider.generateAccessToken(String.valueOf(user.getId()));
         redisTokenRepository.saveAccessToken(
-                user.getNickname(),
+                String.valueOf(user.getId()),
                 accessToken,
                 jwtTokenProvider.getRemainingDuration(accessToken)
         );
