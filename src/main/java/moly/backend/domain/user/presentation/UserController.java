@@ -48,6 +48,6 @@ public class UserController {
             @AuthenticationPrincipal Long id,
             @RequestPart("profileImage") MultipartFile profileImage
     ) {
-        userProfileImageUpdateService.update(id, profileImage);
+        userProfileImageUpdateService.execute(id, profileImage);
     }
 }
