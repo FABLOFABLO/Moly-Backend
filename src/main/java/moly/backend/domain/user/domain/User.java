@@ -31,7 +31,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 30)
     private String nickname;
 
-    @Column(name = "profile_image")
+    @Column(name = "profile_image", length = 2048)
     private String profileImage;
 
     @Column(name = "memo_count", nullable = false)
@@ -42,6 +42,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
+    public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 }

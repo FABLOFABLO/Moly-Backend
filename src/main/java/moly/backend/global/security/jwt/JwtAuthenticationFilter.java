@@ -51,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) {
         try {
             String subject = jwtTokenProvider.getSubject(token);
+            Long userId = Long.valueOf(subject);
 
             if (!redisTokenRepository.matchesAccessToken(subject, token)) {
                 request.setAttribute(JWT_ERROR_ATTRIBUTE, ErrorCode.INVALID_TOKEN);
@@ -59,11 +60,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            subject,
+                            userId,
                             null,
                             List.of(new SimpleGrantedAuthority("ROLE_USER"))
                     );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (NumberFormatException exception) {
+            request.setAttribute(JWT_ERROR_ATTRIBUTE, ErrorCode.INVALID_TOKEN);
         } catch (DataAccessException exception) {
             request.setAttribute(
                     JWT_ERROR_ATTRIBUTE,
