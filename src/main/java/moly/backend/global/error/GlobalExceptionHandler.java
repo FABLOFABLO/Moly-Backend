@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @Slf4j
 @RestControllerAdvice
@@ -103,6 +104,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(new ErrorResponse(ErrorCode.INVALID_REQUEST_VALUE.name(), message));
+    }
+
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestPart(
+            MissingServletRequestPartException exception
+    ) {
+        ErrorCode errorCode = ErrorCode.S3_INVALID_FILE;
+
+        return ResponseEntity
+                .status(errorCode.status())
+                .body(ErrorResponse.from(errorCode));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

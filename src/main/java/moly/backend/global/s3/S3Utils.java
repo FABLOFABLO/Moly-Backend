@@ -87,9 +87,7 @@ public class S3Utils {
         if (fileName == null || fileName.isBlank()) {return "";}
 
         int extensionIndex = fileName.lastIndexOf(".");
-        if (extensionIndex < 0 || extensionIndex == fileName.length() - 1) {
-            return "";
-        }
+        if (extensionIndex < 0 || extensionIndex == fileName.length() - 1) {return "";}
 
         return fileName.substring(extensionIndex + 1).toLowerCase();
     }
