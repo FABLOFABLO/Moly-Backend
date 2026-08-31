@@ -133,7 +133,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(
             DataIntegrityViolationException exception
     ) {
-        ErrorCode errorCode = ErrorCode.USER_ALREADY_EXISTS;
+        String message = exception.getMostSpecificCause().getMessage();
+        ErrorCode errorCode = message != null && message.contains("uk_capsule_")
+                ? ErrorCode.CAPSULE_INVALID_INPUT
+                : ErrorCode.USER_ALREADY_EXISTS;
 
         return ResponseEntity
                 .status(errorCode.status())
