@@ -163,12 +163,14 @@ public class CapsuleCreateService {
         if (images == null || images.isEmpty()) {
             return;
         }
-        List<CapsuleImage> capsuleImages = images.stream()
-                .map(image -> CapsuleImage.builder()
-                        .capsule(capsule)
-                        .image(s3Utils.upload(image, "capsules"))
-                        .build())
-                .toList();
+        List<CapsuleImage> capsuleImages = new ArrayList<>();
+        for (MultipartFile image : images) {
+            String imageKey = s3Utils.upload(image, "capsules");
+            capsuleImages.add(CapsuleImage.builder()
+                    .capsule(capsule)
+                    .imageKey(imageKey)
+                    .build());
+        }
         capsuleImageRepository.saveAll(capsuleImages);
     }
 }

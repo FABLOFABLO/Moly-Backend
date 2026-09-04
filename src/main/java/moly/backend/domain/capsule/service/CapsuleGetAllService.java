@@ -24,6 +24,10 @@ public class CapsuleGetAllService {
         List<Capsule> capsules = isOpened
                 ? capsuleRepository.findOpenedByMemberUserId(user.getId())
                 : capsuleRepository.findUnopenedByMemberUserId(user.getId());
-        return new CapsuleListResponse(capsules.stream().map(CapsuleListItemResponse::from).toList());
+        return new CapsuleListResponse(
+                capsules.stream()
+                .map(CapsuleListItemResponse::from)
+                .toList()
+        );
     }
 }

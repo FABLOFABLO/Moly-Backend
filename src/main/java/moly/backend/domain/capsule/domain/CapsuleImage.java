@@ -28,12 +28,12 @@ public class CapsuleImage {
     @JoinColumn(name = "capsule_id", nullable = false)
     private Capsule capsule;
 
-    @Column(nullable = false, length = 512)
-    private String image;
+    @Column(name = "image_key", nullable = false, length = 512)
+    private String imageKey;
 
     @Builder
-    private CapsuleImage(Capsule capsule, String image) {
+    private CapsuleImage(Capsule capsule, String imageKey) {
         this.capsule = capsule;
-        this.image = image;
+        this.imageKey = imageKey;
     }
 }
