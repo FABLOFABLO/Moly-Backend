@@ -37,7 +37,7 @@ public class CapsuleOpenService {
                 .orElseThrow(CapsuleNotFoundException::new);
         CapsuleMember member = capsuleMemberRepository.findByCapsule_IdAndUser_Id(capsuleId, user.getId())
                 .orElseThrow(CapsuleAccessDeniedException::new);
-        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getOpenedTime())) {
+        if (LocalDate.now(KOREA_ZONE_ID).isBefore(capsule.getOpenDate())) {
             throw new CapsuleNotOpenableException();
         }
 

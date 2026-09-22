@@ -40,7 +40,7 @@ public class CapsuleArrivalService {
         if (capsule.getOpenedTime() != null) {
             throw new CapsuleAlreadyOpenedException();
         }
-        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getOpenedTime())) {
+        if (LocalDate.now(KOREA_ZONE_ID).isBefore(capsule.getOpenDate())) {
             throw new CapsuleNotOpenableException();
         }
         if (!capsuleRepository.isWithinArrivalRange(
