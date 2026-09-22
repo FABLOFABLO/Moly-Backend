@@ -14,10 +14,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import moly.backend.domain.capsule.exception.CapsuleAlreadyOpenedException;
+import moly.backend.domain.capsule.exception.CapsuleInvalidTimeException;
 import moly.backend.domain.expedition.domain.Expedition;
 import moly.backend.domain.user.domain.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.locationtech.jts.geom.Point;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -50,8 +52,8 @@ public class Capsule {
     @Column(name = "required_count", nullable = false)
     private int requiredCount;
 
-    @Column(name = "required_time", nullable = false)
-    private LocalDateTime requiredTime;
+    @Column(name = "open_date", nullable = false)
+    private LocalDate openDate;
 
     @Column(name = "opened_time")
     private LocalDateTime openedTime;
@@ -68,14 +70,14 @@ public class Capsule {
 
     @Builder
     private Capsule(User user, Expedition expedition, String title, String content, Point location,
-                    int requiredCount, LocalDateTime requiredTime, String address, String roadAddress) {
+                    int requiredCount, LocalDate openDate, String address, String roadAddress) {
         this.user = user;
         this.expedition = expedition;
         this.title = title;
         this.content = content;
         this.location = location;
         this.requiredCount = requiredCount;
-        this.requiredTime = requiredTime;
+        this.openDate = openDate;
         this.address = address;
         this.roadAddress = roadAddress;
     }

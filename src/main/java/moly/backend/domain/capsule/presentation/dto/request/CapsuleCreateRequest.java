@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.UniqueElements;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public record CapsuleCreateRequest(
@@ -34,9 +34,9 @@ public record CapsuleCreateRequest(
         @Positive(message = "개봉 인원은 최소 1명입니다")
         Integer requiredCount,
 
-        @JsonProperty("required_time")
-        @NotNull(message = "개봉 일시는 필수입니다")
-        LocalDateTime requiredTime,
+        @JsonProperty("open_date")
+        @NotNull(message = "개봉일은 필수입니다")
+        LocalDate openDate,
 
         @NotNull(message = "경도와 위도는 필수입니다")
         @DecimalMin(value = "-90.0", message = "유효하지 않은 위도입니다")

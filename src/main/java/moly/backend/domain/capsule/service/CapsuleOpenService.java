@@ -16,6 +16,7 @@ import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -36,7 +37,7 @@ public class CapsuleOpenService {
                 .orElseThrow(CapsuleNotFoundException::new);
         CapsuleMember member = capsuleMemberRepository.findByCapsule_IdAndUser_Id(capsuleId, user.getId())
                 .orElseThrow(CapsuleAccessDeniedException::new);
-        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getRequiredTime())) {
+        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getOpenedTime())) {
             throw new CapsuleNotOpenableException();
         }
 

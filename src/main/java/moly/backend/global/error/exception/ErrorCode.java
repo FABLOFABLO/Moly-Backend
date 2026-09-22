@@ -24,7 +24,7 @@ public enum ErrorCode {
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
 
     CAPSULE_INVALID_INPUT(HttpStatus.BAD_REQUEST, "타임캡슐 요청 값이 올바르지 않습니다."),
-    CAPSULE_INVALID_TIME(HttpStatus.BAD_REQUEST, "개봉 일시는 현재로부터 7일 이후여야 합니다."),
+    CAPSULE_INVALID_TIME(HttpStatus.BAD_REQUEST, "개봉일은 오늘로부터 7일 이후여야 합니다."),
     CAPSULE_NOT_OPENABLE(HttpStatus.BAD_REQUEST, "타임캡슐을 개봉할 수 없는 상태입니다."),
     CAPSULE_DAILY_LIMIT_EXCEEDED(HttpStatus.CONFLICT, "하루에 생성할 수 있는 타임캡슐 수를 초과했습니다."),
     CAPSULE_ALREADY_OPENED(HttpStatus.CONFLICT, "이미 개봉된 타임캡슐입니다."),

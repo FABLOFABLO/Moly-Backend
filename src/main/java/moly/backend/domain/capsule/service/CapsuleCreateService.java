@@ -64,13 +64,15 @@ public class CapsuleCreateService {
                 ? null
                 : expeditionRepository.findByIdForUpdate(request.expeditionId())
                         .orElseThrow(CapsuleInvalidInputException::new);
+
         List<User> members = resolveMembers(creator, expedition, request.memberIds());
         if (request.requiredCount() > members.size()) {
             throw new CapsuleInvalidInputException();
         }
-        if (request.requiredTime().isBefore(LocalDateTime.now(KOREA_ZONE_ID).plusDays(7))) {
+        if (request.openDate().isBefore(LocalDate.now(KOREA_ZONE_ID).plusDays(7))) {
             throw new CapsuleInvalidTimeException();
         }
+
         validateDailyLimit(expedition, members);
 
         KakaoAddressClient.KakaoAddress address = kakaoAddressClient.findAddress(
@@ -87,7 +89,7 @@ public class CapsuleCreateService {
                 .content(request.content())
                 .location(location)
                 .requiredCount(request.requiredCount())
-                .requiredTime(request.requiredTime())
+                .openDate(request.openDate())
                 .address(address.address())
                 .roadAddress(address.roadAddress())
                 .build());

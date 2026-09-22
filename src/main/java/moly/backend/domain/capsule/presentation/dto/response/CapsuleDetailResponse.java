@@ -2,6 +2,7 @@ package moly.backend.domain.capsule.presentation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import moly.backend.domain.capsule.domain.Capsule;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public record CapsuleDetailResponse(
 
         @JsonProperty("required_count") int requiredCount,
 
-        @JsonProperty("required_time") LocalDateTime requiredTime,
+        @JsonProperty("open_date") LocalDate openDate,
 
         @JsonProperty("opened_time") LocalDateTime openedTime,
 
@@ -48,7 +49,7 @@ public record CapsuleDetailResponse(
                 capsule.getAddress(),
                 capsule.getRoadAddress(),
                 capsule.getRequiredCount(),
-                capsule.getRequiredTime(),
+                capsule.getOpenDate(),
                 capsule.getOpenedTime(),
                 capsule.getCreatedAt()
         );

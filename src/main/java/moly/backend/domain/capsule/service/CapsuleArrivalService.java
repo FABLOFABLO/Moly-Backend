@@ -18,6 +18,7 @@ import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -39,7 +40,7 @@ public class CapsuleArrivalService {
         if (capsule.getOpenedTime() != null) {
             throw new CapsuleAlreadyOpenedException();
         }
-        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getRequiredTime())) {
+        if (LocalDateTime.now(KOREA_ZONE_ID).isBefore(capsule.getOpenedTime())) {
             throw new CapsuleNotOpenableException();
         }
         if (!capsuleRepository.isWithinArrivalRange(
