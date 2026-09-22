@@ -53,7 +53,7 @@ public class S3Utils {
             throw new S3UploadFailedException();
         }
 
-        return getFileUrl(key);
+        return key;
     }
 
     public String getFileUrl(String key) {
@@ -66,7 +66,9 @@ public class S3Utils {
     }
 
     private void validateImageFile(MultipartFile file) {
-        if (file == null || file.isEmpty()) {throw new S3InvalidFileException();}
+        if (file == null || file.isEmpty()) {
+            throw new S3InvalidFileException();
+        }
 
         String contentType = file.getContentType();
         if (contentType == null || !ALLOWED_IMAGE_CONTENT_TYPES.contains(contentType)) {

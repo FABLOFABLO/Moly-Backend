@@ -19,7 +19,8 @@ public class UserProfileImageUpdateService {
     public void execute(Long id, MultipartFile profileImage) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
-        String profileImageUrl = s3Utils.upload(profileImage, "profiles");
+        String profileImageKey = s3Utils.upload(profileImage, "profiles");
+        String profileImageUrl = s3Utils.getFileUrl(profileImageKey);
 
         user.updateProfileImage(profileImageUrl);
     }
