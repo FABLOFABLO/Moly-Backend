@@ -37,43 +37,43 @@ public class MemoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(
-            @AuthenticationPrincipal String nickname,
+            @AuthenticationPrincipal Long id,
             @Valid @RequestBody MemoCreateRequest request
     ) {
-        memoCreateService.execute(nickname, request);
+        memoCreateService.execute(id, request);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public MemoListResponse getAll(@AuthenticationPrincipal String nickname) {
-        return memoGetAllService.execute(nickname);
+    public MemoListResponse getAll(@AuthenticationPrincipal Long id) {
+        return memoGetAllService.execute(id);
     }
 
     @GetMapping("/{memo-id}")
     @ResponseStatus(HttpStatus.OK)
     public MemoResponse getDetail(
-            @AuthenticationPrincipal String nickname,
+            @AuthenticationPrincipal Long id,
             @PathVariable("memo-id") @Positive(message = "유효하지 않은 id 값입니다") Long memoId
     ) {
-        return memoGetDetailService.execute(nickname, memoId);
+        return memoGetDetailService.execute(id, memoId);
     }
 
     @PatchMapping("/{memo-id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(
-            @AuthenticationPrincipal String nickname,
+            @AuthenticationPrincipal Long id,
             @PathVariable("memo-id") @Positive(message = "유효하지 않은 id 값입니다") Long memoId,
             @Valid @RequestBody MemoUpdateRequest request
     ) {
-        memoUpdateService.execute(nickname, memoId, request);
+        memoUpdateService.execute(id, memoId, request);
     }
 
     @DeleteMapping("/{memo-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
-            @AuthenticationPrincipal String nickname,
+            @AuthenticationPrincipal Long id,
             @PathVariable("memo-id") @Positive(message = "유효하지 않은 id 값입니다") Long memoId
     ) {
-        memoDeleteService.execute(nickname, memoId);
+        memoDeleteService.execute(id, memoId);
     }
 }

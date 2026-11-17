@@ -27,8 +27,8 @@ public class MemoCreateService {
     private final KakaoAddressClient kakaoAddressClient;
 
     @Transactional
-    public void execute(String nickname, MemoCreateRequest request) {
-        User user = userRepository.findByNickname(nickname)
+    public void execute(Long userId, MemoCreateRequest request) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         KakaoAddressClient.KakaoAddress address = kakaoAddressClient.findAddress(

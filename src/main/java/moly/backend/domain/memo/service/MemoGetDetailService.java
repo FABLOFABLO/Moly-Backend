@@ -19,8 +19,8 @@ public class MemoGetDetailService {
     private final MemoRepository memoRepository;
     private final UserRepository userRepository;
 
-    public MemoResponse execute(String nickname, Long memoId) {
-        User user = userRepository.findByNickname(nickname)
+    public MemoResponse execute(Long userId, Long memoId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         Memo memo = memoRepository.findById(memoId)
                 .orElseThrow(MemoNotFoundException::new);
