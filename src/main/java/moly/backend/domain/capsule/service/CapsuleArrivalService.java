@@ -36,7 +36,7 @@ public class CapsuleArrivalService {
     @Transactional
     public void execute(Long userId, Long capsuleId, CapsuleLocationRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Capsule capsule = capsuleRepository.findById(capsuleId).orElseThrow(CapsuleNotFoundException::new);
+        Capsule capsule = capsuleRepository.findByIdForUpdate(capsuleId).orElseThrow(CapsuleNotFoundException::new);
         if (capsule.getOpenedTime() != null) {
             throw new CapsuleAlreadyOpenedException();
         }
