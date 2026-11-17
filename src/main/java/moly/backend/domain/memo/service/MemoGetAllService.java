@@ -16,8 +16,8 @@ public class MemoGetAllService {
     private final MemoRepository memoRepository;
     private final UserRepository userRepository;
 
-    public MemoListResponse execute(String nickname) {
-        User user = userRepository.findByNickname(nickname)
+    public MemoListResponse execute(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         return MemoListResponse.of(

@@ -38,14 +38,22 @@ public class Memo {
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
     private Point location;
 
+    @Column(length = 255)
+    private String address;
+
+    @Column(name = "road_address", length = 255)
+    private String roadAddress;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder
-    private Memo(String content, Point location, User user) {
+    private Memo(String content, Point location, String address, String roadAddress, User user) {
         this.content = content;
         this.location = location;
+        this.address = address;
+        this.roadAddress = roadAddress;
         this.user = user;
     }
 
