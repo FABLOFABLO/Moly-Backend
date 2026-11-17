@@ -62,7 +62,7 @@ public class Capsule {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String address;
 
     @Column(name = "road_address", length = 255)

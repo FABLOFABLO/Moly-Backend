@@ -38,7 +38,7 @@ public class Memo {
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
     private Point location;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String address;
 
     @Column(name = "road_address", length = 255)
