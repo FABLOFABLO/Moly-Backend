@@ -7,6 +7,7 @@ import moly.backend.domain.memo.presentation.dto.request.MemoCreateRequest;
 import moly.backend.domain.user.domain.User;
 import moly.backend.domain.user.domain.repository.UserRepository;
 import moly.backend.domain.user.exception.UserNotFoundException;
+import moly.backend.global.kakao.KakaoAddressClient;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -23,12 +24,16 @@ public class MemoCreateService {
 
     private final MemoRepository memoRepository;
     private final UserRepository userRepository;
+    private final KakaoAddressClient kakaoAddressClient;
 
     @Transactional
     public void execute(String nickname, MemoCreateRequest request) {
         User user = userRepository.findByNickname(nickname)
                 .orElseThrow(UserNotFoundException::new);
 
+        KakaoAddressClient.KakaoAddress address = kakaoAddressClient.findAddress(
+                request.longitude(), request.latitude()
+        );
         Point location = GEOMETRY_FACTORY.createPoint(
                 new Coordinate(request.longitude(), request.latitude())
         );
@@ -37,6 +42,8 @@ public class MemoCreateService {
         Memo memo = Memo.builder()
                 .content(request.content())
                 .location(location)
+                .address(address.address())
+                .roadAddress(address.roadAddress())
                 .user(user)
                 .build();
 

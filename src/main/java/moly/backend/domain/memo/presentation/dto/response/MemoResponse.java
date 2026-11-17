@@ -11,7 +11,10 @@ public record MemoResponse(
         @JsonProperty("created_at")
         LocalDateTime createdAt,
         Double latitude,
-        Double longitude
+        Double longitude,
+        String address,
+        @JsonProperty("road_address")
+        String roadAddress
 ) {
     public static MemoResponse from(Memo memo) {
         return new MemoResponse(
@@ -19,7 +22,9 @@ public record MemoResponse(
                 memo.getContent(),
                 memo.getCreatedAt(),
                 memo.getLocation().getY(),
-                memo.getLocation().getX()
+                memo.getLocation().getX(),
+                memo.getAddress(),
+                memo.getRoadAddress()
         );
     }
 }
