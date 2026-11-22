@@ -51,8 +51,11 @@ public class KakaoAddressClient {
 
     public record KakaoAddress(String address, String roadAddress) {
         private static KakaoAddress from(KakaoAddressResponse response) {
-            if (response == null || response.documents() == null || response.documents().isEmpty()) {
+            if (response == null || response.documents() == null) {
                 throw new KakaoAddressLookupFailedException();
+            }
+            if (response.documents().isEmpty()) {
+                return new KakaoAddress(null, null);
             }
 
             KakaoAddressDocument document = response.documents().getFirst();

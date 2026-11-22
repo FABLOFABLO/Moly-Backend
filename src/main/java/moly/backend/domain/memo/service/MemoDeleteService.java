@@ -18,8 +18,8 @@ public class MemoDeleteService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void execute(String nickname, Long memoId) {
-        User user = userRepository.findByNickname(nickname)
+    public void execute(Long userId, Long memoId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         Memo memo = memoRepository.findById(memoId)
                 .orElseThrow(MemoNotFoundException::new);
